@@ -1,6 +1,6 @@
 # tlias-web-management
 
-Java Web 课程练习项目 —— 基于 Spring Boot + MyBatis 的「天立斯」后台管理系统（学习进行中，功能持续补充）。
+Java Web 课程练习项目 —— 基于 Spring Boot + MyBatis 的「tlias」后台管理系统（学习进行中，功能持续补充）。
 
 ## 技术栈
 

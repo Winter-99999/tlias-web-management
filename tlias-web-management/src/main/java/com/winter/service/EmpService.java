@@ -6,6 +6,7 @@ import com.winter.pojo.PageResult;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public interface EmpService {
@@ -13,4 +14,6 @@ public interface EmpService {
     PageResult<Emp> page(EmpQueryParam empQueryParam);
 
     void save(Emp emp);
+
+    void delete(List<Integer> ids);
 }
