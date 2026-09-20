@@ -3,8 +3,6 @@ package com.winter.utils;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.PutObjectRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,10 +25,15 @@ public class OssUtil {
     */
 
     //2.把配置信息封装到类中，随后注入OssProperties对象
-    @Autowired
-    private OssProperties ossProperties;
-    String endpoint = ossProperties.getEndpoint();
-    String bucketName = ossProperties.getBucketName();
+    // 【修复】这里必须用【构造器注入】
+    // 之前写的是 @Autowired 字段 + "String endpoint = ossProperties.getEndpoint();"
+    // 这种字段初始化语句是在 new OssUtil() 的时候执行的，而那一刻 Spring 还没来得及
+    // 完成 @Autowired 注入，ossProperties 仍然是 null，所以启动就抛 NullPointerException。
+    private final OssProperties ossProperties;
+
+    public OssUtil(OssProperties ossProperties) {
+        this.ossProperties = ossProperties;
+    }
 
 
     // 读取cmd设置的系统环境变量 OSS_ACCESS_KEY_ID / OSS_ACCESS_KEY_SECRET
@@ -49,6 +52,9 @@ public class OssUtil {
      * @return 完整文件访问URL
      */
     public String upload(InputStream inputStream, String ossKey) {
+        // 【修复】改成调用时实时取值，不再依赖字段初始化时机
+        String endpoint = ossProperties.getEndpoint();
+        String bucketName = ossProperties.getBucketName();
         OSS ossClient = new OSSClientBuilder().build(endpoint, getAk(), getSk());
         try {
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, ossKey, inputStream);
