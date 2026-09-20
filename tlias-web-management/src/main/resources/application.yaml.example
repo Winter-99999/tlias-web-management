@@ -1,0 +1,38 @@
+# ============================================================
+# 配置模板
+# 使用方法：把本文件复制为同目录下的 application.yaml，
+#          然后按下面注释填入你自己的真实信息。
+# （application.yaml 已被 .gitignore 忽略，不会上传到 GitHub）
+# ============================================================
+spring:
+  application:
+    name: tlias-web-managemwnt
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/tlias
+    username: root
+    password: 改成你自己的MySQL密码
+    type: com.alibaba.druid.pool.DruidDataSource
+  servlet:
+    multipart:
+      max-file-size: 10MB    # 最大单个文件大小，默认 1MB
+      max-request-size: 20MB # 最大请求体大小，默认 10MB
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 开启驼峰命名映射 xxx_abc -> xxx_Abc
+    map-underscore-to-camel-case: true
+
+aliyun:
+  oss:
+    endpoint: oss-cn-beijing.aliyuncs.com
+    bucket-name: 改成你自己的Bucket名称
+    # domain: https://你的Bucket名称.oss-cn-beijing.aliyuncs.com
+
+# ------------------------------------------------------------
+# 注意：阿里云 OSS 的 AccessKey 不要写在这里！
+# 代码中 OssUtil 是通过系统环境变量读取的，启动前请先设置：
+#   OSS_ACCESS_KEY_ID
+#   OSS_ACCESS_KEY_SECRET
+# ------------------------------------------------------------
