@@ -24,6 +24,7 @@ public class EmpController {
     //条件分页查询   例 http://localhost:8080/emps?page=1&pageSize=5&name=王&gender=1&begin=2020-03-10&end=2026-04-10
     @GetMapping()
     public Result page(EmpQueryParam empQueryParam){
+        log.info("分页查询，参数：{}",empQueryParam);
          PageResult<Emp> pageResult = empService.page(empQueryParam);
          return Result.success(pageResult);
     }
@@ -34,7 +35,7 @@ public class EmpController {
         log.info("保存员工，员工信息：{}",emp);
         //保存员工
         empService.save(emp);
-        return Result.success();
+        return Result.success(empService.getById(emp.getId()));
     }
 
     //删除员工
@@ -42,6 +43,22 @@ public class EmpController {
     public Result delete(@RequestParam List<Integer> ids){
         log.info("删除员工，员工id：{}",ids);
         empService.delete(ids);
+        return Result.success();
+    }
+
+    //根据id查询员工信息
+    @GetMapping("/{id}")
+    public Result getInfo(@PathVariable Integer id){
+        log.info("查询员工，员工id：{}",id);
+        Emp emp = empService.getById(id);
+        return Result.success(emp);
+    }
+
+    //根据id修改员工信息
+    @PutMapping()
+    public Result update(@RequestBody Emp emp){
+        log.info("修改员工，员工信息：{}",emp);
+        empService.update(emp);
         return Result.success();
     }
 }

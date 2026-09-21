@@ -5,7 +5,7 @@
 
    <!--批量插入员工经历信息-->
 <mapper namespace="com.winter.mapper.EmpExprMapper">
-    <insert id="insertBatch">
+    <insert id="insertBatch" useGeneratedKeys="true" keyProperty="id">
             insert into emp_expr(emp_id,begin,end,company,job) values
             <foreach collection="exprList" item="expr" separator=",">
                 (#{expr.empId},#{expr.begin},#{expr.end},#{expr.company},#{expr.job})
