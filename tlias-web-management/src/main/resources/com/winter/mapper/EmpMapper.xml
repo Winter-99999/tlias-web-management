@@ -112,6 +112,21 @@
         WHERE id = #{id}
     </update>
 
+    <!--统计员工职位-->
+    <select id="getEmpCountJob">
+        select (case job when '1' then '班主任'
+            when '2' then '讲师'
+            when '3' then '学工主管'
+            when '4' then '教研主管'
+            when '5' then '咨询师'
+                else '其他' end ) as pos
+             ,count(*) as num from emp group by job order by num
+    </select>
+    <!--统计员工性别-->
+    <select id="getEmpCountGender">
+        select if(gender='1','男','女') name,count(*) value from emp group by gender
+    </select>
+
 
 
 </mapper>

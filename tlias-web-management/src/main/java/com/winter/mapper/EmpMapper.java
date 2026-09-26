@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Select;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface EmpMapper {
@@ -47,4 +48,8 @@ public interface EmpMapper {
     Emp getById(Integer id);
 
     void update(Emp emp);
+
+    List<Map<String,Object>> getEmpCountJob();
+
+    List<Map<String,Object>> getEmpCountGender();
 }
