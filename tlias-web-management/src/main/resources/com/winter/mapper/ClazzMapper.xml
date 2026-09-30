@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.winter.mapper.ClazzMapper">
+
+    <!--
+      注意：name / create_time / update_time 在 emp 表里也有，
+      所以必须加 c. 前缀限定，否则 SQL 会报「字段名歧义」。
+    -->
+
+    <!--查询所有班级（下拉列表用，不分页）-->
+    <select id="findAll" resultType="com.winter.pojo.Clazz">
+        select c.id,c.name,room,begin_date beginDate,end_date endDate,
+               master_id masterId,subject,c.create_time createTime,c.update_time updateTime,
+               e.name masterName
+        from clazz c left join emp e on c.master_id=e.id
+        order by c.update_time desc
+    </select>
+
+    <!--条件分页查询-->
+    <select id="list" resultType="com.winter.pojo.Clazz">
+        select c.id,c.name,room,begin_date beginDate,end_date endDate,
+               master_id masterId,subject,c.create_time createTime,c.update_time updateTime,
+               e.name masterName
+        from clazz c left join emp e on c.master_id=e.id
+        <where>
+            <if test="name != null and name != ''">
+                c.name like CONCAT('%',#{name},'%')
+            </if>
+            <if test="room != null and room != ''">
+                and c.room like CONCAT('%',#{room},'%')
+            </if>
+            <if test="begin != null and end != null">
+                and c.begin_date between #{begin} and #{end}
+            </if>
+        </where>
+        order by c.update_time desc
+    </select>
+
+    <!--根据id查询班级-->
+    <select id="getById" resultType="com.winter.pojo.Clazz">
+        select c.id,c.name,room,begin_date beginDate,end_date endDate,
+               master_id masterId,subject,c.create_time createTime,c.update_time updateTime,
+               e.name masterName
+        from clazz c left join emp e on c.master_id=e.id
+        where c.id=#{id}
+    </select>
+
+    <!--新增班级-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into clazz (name,room,begin_date,end_date,master_id,subject,create_time,update_time)
+        values (#{name},#{room},#{beginDate},#{endDate},#{masterId},#{subject},#{createTime},#{updateTime})
+    </insert>
+
+    <!--修改班级-->
+    <update id="update" >
+        UPDATE clazz
+        <set>
+        <if test="name != null and name !='' ">
+            name = #{name},
+        </if>
+        <if test="room != null">
+            room = #{room},
+        </if>
+        <if test="beginDate != null ">
+            begin_date = #{beginDate},
+        </if>
+        <if test="endDate != null ">
+            end_date = #{endDate},
+        </if>
+        <if test="masterId != null ">
+            master_id = #{masterId},
+        </if>
+        <if test="subject != null ">
+            subject = #{subject},
+        </if>
+        <if test="updateTime != null">
+            update_time = #{updateTime},
+        </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--删除班级-->
+    <delete id="delete">
+        delete from clazz where id in
+            <foreach collection="ids" item="id" open="(" close=")" separator="," >
+                #{id}
+            </foreach>
+    </delete>
+</mapper>
