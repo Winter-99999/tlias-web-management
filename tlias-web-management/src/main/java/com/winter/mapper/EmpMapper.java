@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -52,4 +51,8 @@ public interface EmpMapper {
     List<Map<String,Object>> getEmpCountJob();
 
     List<Map<String,Object>> getEmpCountGender();
+
+    @Select("select id,username,password from emp " +
+            "where username = #{username} and password = #{password}")
+    Emp getByUsernameAndPassword(Emp emp);
 }

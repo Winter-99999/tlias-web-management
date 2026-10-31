@@ -4,11 +4,9 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.winter.mapper.EmpExprMapper;
 import com.winter.mapper.EmpMapper;
-import com.winter.pojo.Emp;
-import com.winter.pojo.EmpExpr;
-import com.winter.pojo.EmpQueryParam;
-import com.winter.pojo.PageResult;
+import com.winter.pojo.*;
 import com.winter.service.EmpService;
+import com.winter.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -40,7 +39,7 @@ public class EmpServiceImpl implements EmpService {
         */
 
         //设置分页参数
-        PageHelper.startPage(empQueryParam.getPage(),empQueryParam.getPageSize());
+        PageHelper.startPage(empQueryParam.getPage(), empQueryParam.getPageSize());
         //获取当前页数据
         List<Emp> rows = empMapper.list(empQueryParam);
         //解析查询结构，封装PageResult并返回
@@ -59,7 +58,7 @@ public class EmpServiceImpl implements EmpService {
 
         //保存员工经历
         List<EmpExpr> exprList = emp.getExprList();
-        if(!CollectionUtils.isEmpty(exprList)){
+        if (!CollectionUtils.isEmpty(exprList)) {
             exprList.forEach(empExpr -> {
                 empExpr.setEmpId(emp.getId());
             });
@@ -94,11 +93,25 @@ public class EmpServiceImpl implements EmpService {
         empExprMapper.deleteByEmpIds(Arrays.asList(emp.getId()));
         //再插入员工经历
         List<EmpExpr> exprList = emp.getExprList();
-        if(!CollectionUtils.isEmpty(exprList)){
+        if (!CollectionUtils.isEmpty(exprList)) {
             exprList.forEach(empExpr -> {
                 empExpr.setEmpId(emp.getId());
             });
             empExprMapper.insertBatch(exprList);
         }
+    }
+
+    @Override
+    public LoginInfo login(Emp emp) {
+        Emp e = empMapper.getByUsernameAndPassword(emp);
+
+        HashMap<String, Object> claims = new HashMap<>();
+        claims.put("id", e.getId());
+        claims.put("username", e.getUsername());
+        String token = JwtUtil.generateJwt(claims);
+        if (e != null) {
+            return new LoginInfo(e.getId(), e.getUsername(), e.getPassword(), token);
+        }
+        return null;
     }
 }
