@@ -1,5 +1,6 @@
 package com.winter.controller;
 
+import com.winter.anno.Log;
 import com.winter.pojo.*;
 import com.winter.service.StudentService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,7 @@ public class StudentController {
         return Result.success(student);
     }
     //新增学生
+    @Log
     @PostMapping
     public Result add(@RequestBody Student student){
         log.info("新增学生，参数：{}",student);
@@ -38,6 +40,7 @@ public class StudentController {
         return Result.success(studentService.getById(student.getId()));
     }
     //修改学生信息
+    @Log
     @PutMapping
     public Result update(@RequestBody Student student){
         log.info("修改学生，参数：{}",student);
@@ -45,6 +48,7 @@ public class StudentController {
         return Result.success();
     }
     //接收同名的多个 query 参数，封装成 List，集合/数组接收 query 参数，必须加 @RequestParam，否则绑定失败
+    @Log
     @DeleteMapping
     public Result delete(@RequestParam List<Integer> ids){
         log.info("删除学生，ids：{}",ids);

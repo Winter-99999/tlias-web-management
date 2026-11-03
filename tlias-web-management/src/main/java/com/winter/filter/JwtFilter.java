@@ -1,6 +1,8 @@
 package com.winter.filter;
 
 import com.winter.utils.JwtUtil;
+import com.winter.utils.UserContext;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,7 +38,10 @@ public class JwtFilter implements Filter {
         }
         //5.如果token存在，检验token是否合法，如果不合法，返回状态码401
         try {
-            JwtUtil.parseJwt(token);
+            Claims claims = JwtUtil.parseJwt(token);
+            Integer empId = (Integer) claims.get("id");
+            UserContext.setUserId(empId);
+            log.info("当前登录用户id {}", empId);
         } catch (Exception e) {
             log.info("令牌不合法，返回状态码401");
             resp.setStatus(401);
@@ -45,5 +50,7 @@ public class JwtFilter implements Filter {
         //6.如果合法，放行
         log.info("令牌合法，放行");
         chain.doFilter(request, response);
+        //7.删除线程中的数据
+        UserContext.remove();
     }
 }

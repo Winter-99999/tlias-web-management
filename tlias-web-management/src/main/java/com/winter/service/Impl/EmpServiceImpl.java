@@ -104,14 +104,13 @@ public class EmpServiceImpl implements EmpService {
     @Override
     public LoginInfo login(Emp emp) {
         Emp e = empMapper.getByUsernameAndPassword(emp);
-
+        if (e == null) {
+            return null;                  // 先判空
+        }
         HashMap<String, Object> claims = new HashMap<>();
         claims.put("id", e.getId());
         claims.put("username", e.getUsername());
         String token = JwtUtil.generateJwt(claims);
-        if (e != null) {
-            return new LoginInfo(e.getId(), e.getUsername(), e.getPassword(), token);
-        }
-        return null;
+        return new LoginInfo(e.getId(), e.getUsername(), e.getPassword(), token);
     }
 }

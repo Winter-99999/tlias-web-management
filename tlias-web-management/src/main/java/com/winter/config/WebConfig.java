@@ -1,12 +1,13 @@
 package com.winter.config;
-
 import com.winter.interceptor.DemoInterceptor;
 import com.winter.interceptor.TokenInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
+/**
+ * 拦截器配置类
+ */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
     @Autowired
@@ -18,8 +19,9 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")   //拦截所有请求
                 .excludePathPatterns("/login"); //排除登录接口
     }
-     /* /** 拦截所有请求 /depts /depts/2
-     /* 只能拦截一级路径 /depts
-
-      */
+     /*
+        /** 拦截所有请求 /depts /depts/2
+        /* 只能拦截一级路径 /depts
+     */
 }
+
