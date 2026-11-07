@@ -25,7 +25,7 @@ public class DeptServiceImpl implements DeptService {
         if(deptMapper.findById(id) == null){
             throw new BusinessException("部门不存在");
         }
-        if (deptMapper.getEmpCountDept(id) == 0) {
+        if (deptMapper.countEmpByDeptId(id) == 0) {
             deptMapper.deleteById(id);
         } else {
             throw new BusinessException("该部门下有员工，请先删除员工");
@@ -47,11 +47,5 @@ public class DeptServiceImpl implements DeptService {
     public void update(Dept dept) {
         dept.setUpdateTime(LocalDateTime.now());
         deptMapper.update(dept);
-    }
-
-    //统计部门员工人数
-    @Override
-    public Integer getDeptData(Integer id) {
-        return deptMapper.getEmpCountDept(id);
     }
 }

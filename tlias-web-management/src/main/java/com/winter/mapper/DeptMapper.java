@@ -34,5 +34,5 @@ public interface DeptMapper {
     void update(Dept dept);
 
     @Select("select count(*) from emp where dept_id=#{id}")
-    Integer getEmpCountDept(Integer id);
+    Integer countEmpByDeptId(Integer id);
 }

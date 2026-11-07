@@ -22,5 +22,5 @@ public interface ClazzMapper {
 
     void delete(List<Integer> ids);
 
-    Integer getStudentCountClazz(Integer id);
+    Integer countStudentsByClazzId(Integer id);
 }

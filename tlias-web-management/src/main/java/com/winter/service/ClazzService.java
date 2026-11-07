@@ -21,5 +21,4 @@ public interface ClazzService {
 
     void delete(List<Integer> ids);
 
-    Integer getClazzData(Integer id);
 }

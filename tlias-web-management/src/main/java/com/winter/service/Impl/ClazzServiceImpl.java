@@ -69,16 +69,11 @@ public class ClazzServiceImpl implements ClazzService {
         for(Integer id:ids){
             if (clazzMapper.getById(id) == null) {
                 throw new BusinessException("班级不存在");
-            }else if(clazzMapper.getStudentCountClazz(id) > 0){
+            }else if(clazzMapper.countStudentsByClazzId(id) > 0){
                 throw new BusinessException("班级下有学生，请先删除学生");
             }
         }
         clazzMapper.delete(ids);
-    }
-
-    @Override
-    public Integer getClazzData(Integer id) {
-        return clazzMapper.getStudentCountClazz(id);
     }
 
     /**
