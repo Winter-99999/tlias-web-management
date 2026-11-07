@@ -3,24 +3,29 @@ package com.winter.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
 import java.util.Map;
-
+@Component
 public class JwtUtil {
 
-    private static final String SECRET_KEY = "d2ludGVy";           //密钥
-    private static final long EXPIRATION_TIME = 2 * 3600 * 1000L;  //令牌有效期
 
+    @Value("${jwt.secret}")
+    private String secretKey;
+    @Value("${jwt.expiration}")
+    private  long expiration;
     /**
      * 生成JWT令牌
      * @param claims 自定义载荷数据
      * @return jwt字符串
      */
-    public static String generateJwt(Map<String, Object> claims) {
+    public String generateJwt(Map<String, Object> claims) {
         return Jwts.builder()
                 .addClaims(claims)
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 
@@ -29,9 +34,9 @@ public class JwtUtil {
      * @param token jwt字符串
      * @return 载荷Claims
      */
-    public static Claims parseJwt(String token) {
+    public  Claims parseJwt(String token) {
         return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
+                .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody();
     }

@@ -24,6 +24,8 @@ public class EmpServiceImpl implements EmpService {
     private EmpMapper empMapper;
     @Autowired
     private EmpExprMapper empExprMapper;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     public PageResult<Emp> page(EmpQueryParam empQueryParam) {
@@ -110,7 +112,7 @@ public class EmpServiceImpl implements EmpService {
         HashMap<String, Object> claims = new HashMap<>();
         claims.put("id", e.getId());
         claims.put("username", e.getUsername());
-        String token = JwtUtil.generateJwt(claims);
-        return new LoginInfo(e.getId(), e.getUsername(), e.getPassword(), token);
+        String token = jwtUtil.generateJwt(claims);
+        return new LoginInfo(e.getId(), e.getUsername(), token);
     }
 }

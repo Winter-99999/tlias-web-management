@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -15,6 +16,8 @@ import org.springframework.web.servlet.HandlerInterceptor;
 //  拦截器
 //  如果过滤器和拦截器同时存在，过滤器优先级高于拦截器，先执行过滤器中的方法后继续执行拦截器中的方法
 public class TokenInterceptor implements HandlerInterceptor {
+    @Autowired
+    private JwtUtil jwtUtil;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
@@ -30,7 +33,7 @@ public class TokenInterceptor implements HandlerInterceptor {
 
         //3.如果token存在，检验token是否合法，如果不合法，返回状态码401
         try {
-            Claims claims = JwtUtil.parseJwt(token);
+            Claims claims = jwtUtil.parseJwt(token);
             // 从claims取出id，存入ThreadLocal
             Integer empId = (Integer) claims.get("id");
             UserContext.setUserId(empId);

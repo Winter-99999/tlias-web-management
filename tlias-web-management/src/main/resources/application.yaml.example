@@ -6,7 +6,7 @@
 # ============================================================
 spring:
   application:
-    name: tlias-web-managemwnt
+    name: tlias-web-management
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/tlias
@@ -29,7 +29,9 @@ aliyun:
     endpoint: oss-cn-beijing.aliyuncs.com
     bucket-name: 改成你自己的Bucket名称
     # domain: https://你的Bucket名称.oss-cn-beijing.aliyuncs.com
-
+jwt:
+  secret: 改成你自己的密钥（至少32字节的base64）
+  expiration: 7200000   # 令牌有效期，2 小时
 # ------------------------------------------------------------
 # 注意：阿里云 OSS 的 AccessKey 不要写在这里！
 # 代码中 OssUtil 是通过系统环境变量读取的，启动前请先设置：

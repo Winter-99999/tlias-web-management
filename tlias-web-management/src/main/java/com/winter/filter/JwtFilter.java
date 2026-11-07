@@ -8,14 +8,20 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import java.io.IOException;
+
+//学习用，已停用；实际鉴权由 TokenInterceptor 负责
 
 @Slf4j
 //@WebFilter(urlPatterns = "/*") //拦截所有请求
-
+//@Component  // ← 仅注释 @WebFilter 不够：Spring Boot 会把任何 Filter 类型的 Bean 自动注册进过滤链。
+             //   必须把 @Component 也去掉，鉴权才能只由 TokenInterceptor 负责。
 //过滤器执行顺序 放行前->放行->资源->放行后
 public class JwtFilter implements Filter {
+    @Autowired
+    private JwtUtil jwtUtil;
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
@@ -38,7 +44,7 @@ public class JwtFilter implements Filter {
         }
         //5.如果token存在，检验token是否合法，如果不合法，返回状态码401
         try {
-            Claims claims = JwtUtil.parseJwt(token);
+            Claims claims = jwtUtil.parseJwt(token);
             Integer empId = (Integer) claims.get("id");
             UserContext.setUserId(empId);
             log.info("当前登录用户id {}", empId);
@@ -54,3 +60,5 @@ public class JwtFilter implements Filter {
         UserContext.remove();
     }
 }
+
+
