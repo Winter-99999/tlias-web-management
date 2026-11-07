@@ -21,4 +21,6 @@ public interface ClazzMapper {
     void update(Clazz clazz);
 
     void delete(List<Integer> ids);
+
+    Integer getStudentCountClazz(Integer id);
 }

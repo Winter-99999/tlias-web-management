@@ -89,4 +89,9 @@
                 #{id}
             </foreach>
     </delete>
+
+    <!--统计班级人数-->
+    <select id="getStudentCountClazz">
+        select count(*) from student where clazz_id=#{id}
+    </select>
 </mapper>

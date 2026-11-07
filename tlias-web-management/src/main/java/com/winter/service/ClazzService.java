@@ -20,4 +20,6 @@ public interface ClazzService {
     void update(Clazz clazz);
 
     void delete(List<Integer> ids);
+
+    Integer getClazzData(Integer id);
 }
