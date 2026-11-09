@@ -32,7 +32,7 @@ public class StudentController {
         return Result.success(student);
     }
     //新增学生
-    @Log
+    @Log(module = "学员管理", type = "新增")
     @PostMapping
     public Result add(@RequestBody Student student){
         log.info("新增学生，参数：{}",student);

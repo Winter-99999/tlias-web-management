@@ -1,6 +1,7 @@
 package com.winter.controller;
 
 
+import com.winter.anno.Log;
 import com.winter.pojo.Emp;
 import com.winter.pojo.EmpQueryParam;
 import com.winter.pojo.PageResult;
@@ -30,6 +31,7 @@ public class EmpController {
     }
 
     //新增员工
+    @Log(module = "员工管理", type = "新增")
     @PostMapping()
     public Result save(@RequestBody Emp emp){
         log.info("保存员工，员工信息：{}",emp);
@@ -39,6 +41,7 @@ public class EmpController {
     }
 
     //删除员工
+    @Log(module = "员工管理", type = "删除")
     @DeleteMapping()
     public Result delete(@RequestParam List<Integer> ids){
         log.info("删除员工，员工id：{}",ids);
@@ -55,6 +58,7 @@ public class EmpController {
     }
 
     //根据id修改员工信息
+    @Log(module = "员工管理", type = "修改")
     @PutMapping()
     public Result update(@RequestBody Emp emp){
         log.info("修改员工，员工信息：{}",emp);

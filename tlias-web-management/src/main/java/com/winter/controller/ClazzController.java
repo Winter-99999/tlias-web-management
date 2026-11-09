@@ -1,5 +1,6 @@
 package com.winter.controller;
 
+import com.winter.anno.Log;
 import com.winter.pojo.Clazz;
 import com.winter.pojo.ClazzQueryParam;
 import com.winter.pojo.PageResult;
@@ -44,6 +45,7 @@ public class ClazzController {
     }
 
     //新增班级
+    @Log(module = "班级管理", type = "新增")
     @PostMapping
     public Result add(@RequestBody Clazz clazz){
         log.info("新增班级信息：{}",clazz);
@@ -52,6 +54,7 @@ public class ClazzController {
     }
 
     //修改班级
+    @Log(module = "班级管理", type = "修改")
     @PutMapping
     public Result update(@RequestBody Clazz clazz){
         log.info("修改班级信息：{}",clazz);
@@ -60,6 +63,7 @@ public class ClazzController {
     }
 
     //批量删除班级
+    @Log(module = "班级管理", type = "删除")
     @DeleteMapping
     public Result delete(@RequestParam List<Integer> ids){
         log.info("删除班级信息，ids：{}",ids);
