@@ -12,7 +12,7 @@
         from operate_log l
                  left join emp e on l.operate_emp_id = e.id
         <where>
-            <if test="module != null">
+            <if test="module != null and module != ''">
                 l.`module` like concat('%',#{module},'%')
             </if>
             <if test="operateType != null">

@@ -102,6 +102,7 @@ public class OperateLogAspect {
     private void maskSensitive(Object node) {
         if (node instanceof Map) {          // 对象 → 看每个 key 是不是敏感字段
             Map<String, Object> map = (Map<String, Object>) node;
+            map.entrySet().removeIf(e -> e.getValue() == null);
             for (Map.Entry<String, Object> entry : map.entrySet()) {
                 if (SENSITIVE.contains(entry.getKey().toLowerCase())) {
                     entry.setValue("******");

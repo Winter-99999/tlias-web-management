@@ -40,7 +40,7 @@ public class StudentController {
         return Result.success(studentService.getById(student.getId()));
     }
     //修改学生信息
-    @Log
+    @Log(module = "学员管理", type = "修改")
     @PutMapping
     public Result update(@RequestBody Student student){
         log.info("修改学生，参数：{}",student);
@@ -48,7 +48,7 @@ public class StudentController {
         return Result.success();
     }
     //接收同名的多个 query 参数，封装成 List，集合/数组接收 query 参数，必须加 @RequestParam，否则绑定失败
-    @Log
+    @Log(module = "学员管理", type = "删除")
     @DeleteMapping
     public Result delete(@RequestParam List<Integer> ids){
         log.info("删除学生，ids：{}",ids);
