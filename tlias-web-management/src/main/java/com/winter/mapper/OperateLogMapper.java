@@ -1,8 +1,11 @@
 package com.winter.mapper;
 
 import com.winter.pojo.OperateLog;
+import com.winter.pojo.OperateLogQueryParam;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface OperateLogMapper {
@@ -16,4 +19,10 @@ public interface OperateLogMapper {
             " #{className}, #{methodName}, #{methodParams}, #{returnValue}, " +
             " #{costTime}, #{status}, #{errorMsg})")
     void insert(OperateLog operateLog);
+
+    // 条件分页查询
+    List<OperateLog> list(OperateLogQueryParam param);
+
+    // 根据 id 查询详情
+    OperateLog getById(Integer id);
 }

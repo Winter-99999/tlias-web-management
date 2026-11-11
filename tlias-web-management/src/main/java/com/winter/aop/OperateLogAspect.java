@@ -36,6 +36,7 @@ public class OperateLogAspect {
     public Object logOperation(ProceedingJoinPoint joinPoint,Log logAnno) throws Throwable {
         LocalDateTime operateTime = LocalDateTime.now();
         long startMs  = System.currentTimeMillis();
+        String paramsJson = toSafeJson(joinPoint.getArgs());
 
         Object result = null;
         Throwable error = null;
@@ -57,7 +58,7 @@ public class OperateLogAspect {
                 operateLog.setOperateTime(operateTime);
                 operateLog.setClassName(joinPoint.getSignature().getDeclaringTypeName());
                 operateLog.setMethodName(joinPoint.getSignature().getName());
-                operateLog.setMethodParams(toSafeJson(joinPoint.getArgs()));
+                operateLog.setMethodParams(paramsJson);
                 operateLog.setReturnValue(toSafeJson(result));
                 operateLog.setCostTime(System.currentTimeMillis() - startMs);
 
