@@ -1,10 +1,10 @@
 package com.winter.controller;
 
 import com.winter.anno.Log;
+import com.winter.anno.RequireRole;
 import com.winter.pojo.Dept;
 import com.winter.pojo.Result;
 import com.winter.service.DeptService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +14,7 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/depts")  //抽取公共路径
 @RestController
+@RequireRole({1, 2, 3})
 public class DeptController {
     @Autowired
     private DeptService deptService;
@@ -44,6 +45,7 @@ public class DeptController {
 
     //方式三  前端传递的参数名与服务器端参数名一致 可省略注解 【推荐】
     @Log(module = "部门管理", type = "删除")
+    @RequireRole({1, 2})
     @DeleteMapping
     public Result delete(Integer id){
         //System.out.println("根据id删除部门" + id);
@@ -55,6 +57,7 @@ public class DeptController {
     //新增部门
     //使用实体对象来接收json数据，保证属性名与json的键名一致，并加上@RequestBody注解
     @Log(module = "部门管理", type = "新增")
+    @RequireRole({1, 2})
     @PostMapping
     public Result add(@RequestBody Dept dept){
         //System.out.println("新增部门 " + dept);
@@ -82,6 +85,7 @@ public class DeptController {
 
     //修改部门信息
     @Log(module = "部门管理", type = "修改")
+    @RequireRole({1, 2})
     @PutMapping
     public Result update(@RequestBody Dept dept){
         //System.out.println("修改部门 ");

@@ -9,4 +9,5 @@ public class LoginInfo {
     private Integer id;
     private String username;
     private String token;
+    private Short role;                 
 }

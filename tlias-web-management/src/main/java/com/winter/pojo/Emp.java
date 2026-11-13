@@ -23,7 +23,7 @@ public class Emp {
     private Integer deptId;             // 部门ID
     private LocalDateTime createTime;   // 创建时间
     private LocalDateTime updateTime;   // 修改时间
-
+    private Short role;                 // 角色，1超级管理员，2教务，3任课教师
     //封装部门名称
     private String deptName; // 部门名称
     //封装员工经历

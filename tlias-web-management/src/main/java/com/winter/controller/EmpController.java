@@ -2,14 +2,16 @@ package com.winter.controller;
 
 
 import com.winter.anno.Log;
+import com.winter.anno.RequireRole;
+import com.winter.exception.BusinessException;
 import com.winter.pojo.Emp;
 import com.winter.pojo.EmpQueryParam;
 import com.winter.pojo.PageResult;
 import com.winter.pojo.Result;
 import com.winter.service.EmpService;
+import com.winter.utils.UserContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/emps")
+@RequireRole({1, 2})
 public class EmpController {
     @Autowired
     private EmpService empService;
@@ -34,6 +37,9 @@ public class EmpController {
     @Log(module = "员工管理", type = "新增")
     @PostMapping()
     public Result save(@RequestBody Emp emp){
+        if (emp.getRole() != null && !isSuperAdmin()) {
+            throw new BusinessException("只有超级管理员可以指定角色");
+        }
         log.info("保存员工，员工信息：{}",emp);
         //保存员工
         empService.save(emp);
@@ -61,8 +67,18 @@ public class EmpController {
     @Log(module = "员工管理", type = "修改")
     @PutMapping()
     public Result update(@RequestBody Emp emp){
+        Emp old = empService.getById(emp.getId());
+        if (old == null) {
+            throw new BusinessException("员工不存在");
+        }
+        if (emp.getRole() != null && !emp.getRole().equals(old.getRole()) && !isSuperAdmin()) {
+            throw new BusinessException("只有超级管理员可以修改角色");
+        }
         log.info("修改员工，员工信息：{}",emp);
         empService.update(emp);
         return Result.success();
+    }
+    private boolean isSuperAdmin() {
+        return Integer.valueOf(1).equals(UserContext.getRole());
     }
 }

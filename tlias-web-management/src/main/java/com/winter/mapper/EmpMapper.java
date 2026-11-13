@@ -1,7 +1,6 @@
 package com.winter.mapper;
 
 import com.winter.pojo.Emp;
-import com.winter.pojo.EmpExpr;
 import com.winter.pojo.EmpQueryParam;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -33,11 +32,11 @@ public interface EmpMapper {
     */
 
     //条件分页查询
-    public List<Emp> list(EmpQueryParam empQueryParam);
+     List<Emp> list(EmpQueryParam empQueryParam);
 
     @Options(useGeneratedKeys = true,keyProperty = "id")  //获取到生成的主键
-    @Insert("insert into emp(username,name,gender,phone,job,salary,image,entry_date,dept_id,create_time,update_time) " +
-            "values(#{username},#{name},#{gender},#{phone},#{job},#{salary},#{image},#{entryDate},#{deptId},#{createTime},#{updateTime})")
+    @Insert("insert into emp(username,name,gender,phone,job,role,salary,image,entry_date,dept_id,create_time,update_time) " +
+            "values(#{username},#{name},#{gender},#{phone},#{job},#{role},#{salary},#{image},#{entryDate},#{deptId},#{createTime},#{updateTime})")
     void insert(Emp emp);
 
 
@@ -52,7 +51,7 @@ public interface EmpMapper {
 
     List<Map<String,Object>> getEmpCountGender();
 
-    @Select("select id,username,password from emp " +
+    @Select("select id,username,password,role from emp " +
             "where username = #{username} and password = #{password}")
     Emp getByUsernameAndPassword(Emp emp);
 }

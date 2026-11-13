@@ -1,6 +1,7 @@
 package com.winter.controller;
 
 
+import com.winter.anno.RequireRole;
 import com.winter.pojo.Result;
 import com.winter.utils.OssUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -9,11 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+
 import java.io.IOException;
-import java.util.UUID;
+
 
 @Slf4j
+@RequireRole({1, 2})
 @RestController
 public class UpLoadController {
     //本地存储

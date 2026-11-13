@@ -1,5 +1,6 @@
 package com.winter.controller;
 
+import com.winter.anno.RequireRole;
 import com.winter.pojo.OperateLog;
 import com.winter.pojo.OperateLogQueryParam;
 import com.winter.pojo.PageResult;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
+@RequireRole({1})
 @RequestMapping("/logs")
 public class OperateLogController {
 

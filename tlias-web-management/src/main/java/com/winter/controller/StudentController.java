@@ -1,6 +1,7 @@
 package com.winter.controller;
 
 import com.winter.anno.Log;
+import com.winter.anno.RequireRole;
 import com.winter.pojo.*;
 import com.winter.service.StudentService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @RestController
 @Slf4j
+@RequireRole({1, 2, 3})
 @RequestMapping("/students")
 public class StudentController {
     @Autowired
@@ -33,6 +35,7 @@ public class StudentController {
     }
     //新增学生
     @Log(module = "学员管理", type = "新增")
+    @RequireRole({1, 2})
     @PostMapping
     public Result add(@RequestBody Student student){
         log.info("新增学生，参数：{}",student);
@@ -41,6 +44,7 @@ public class StudentController {
     }
     //修改学生信息
     @Log(module = "学员管理", type = "修改")
+    @RequireRole({1, 2})
     @PutMapping
     public Result update(@RequestBody Student student){
         log.info("修改学生，参数：{}",student);
@@ -49,6 +53,7 @@ public class StudentController {
     }
     //接收同名的多个 query 参数，封装成 List，集合/数组接收 query 参数，必须加 @RequestParam，否则绑定失败
     @Log(module = "学员管理", type = "删除")
+    @RequireRole({1, 2})
     @DeleteMapping
     public Result delete(@RequestParam List<Integer> ids){
         log.info("删除学生，ids：{}",ids);

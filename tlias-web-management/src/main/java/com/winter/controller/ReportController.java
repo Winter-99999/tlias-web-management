@@ -1,6 +1,6 @@
 package com.winter.controller;
 
-import com.winter.mapper.EmpMapper;
+import com.winter.anno.RequireRole;
 import com.winter.pojo.JobOption;
 import com.winter.pojo.Result;
 import com.winter.service.ReportService;
@@ -15,6 +15,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
+@RequireRole({1, 2})
 @RequestMapping("/report")
 public class ReportController {
 

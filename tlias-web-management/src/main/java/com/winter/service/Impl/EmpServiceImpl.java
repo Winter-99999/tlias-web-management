@@ -56,6 +56,9 @@ public class EmpServiceImpl implements EmpService {
         //保存员工基本信息
         emp.setCreateTime(LocalDateTime.now());
         emp.setUpdateTime(LocalDateTime.now());
+        if (emp.getRole() == null) {
+            emp.setRole((short) 2);   // 默认教务
+        }
         empMapper.insert(emp);
 
         //保存员工经历
@@ -112,7 +115,11 @@ public class EmpServiceImpl implements EmpService {
         HashMap<String, Object> claims = new HashMap<>();
         claims.put("id", e.getId());
         claims.put("username", e.getUsername());
+        Integer role = e.getRole() == null ? null : e.getRole().intValue();
+        if (role != null) {
+            claims.put("role", role);
+        }
         String token = jwtUtil.generateJwt(claims);
-        return new LoginInfo(e.getId(), e.getUsername(), token);
+        return new LoginInfo(e.getId(), e.getUsername(), token, e.getRole());
     }
 }
