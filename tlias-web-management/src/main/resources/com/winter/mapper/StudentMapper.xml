@@ -91,4 +91,20 @@
             </foreach>
     </delete>
 
+    <update id="addViolation">
+        update student
+        set violation_count = violation_count + 1,
+            violation_score = violation_score + #{score},
+            update_time = now()
+        where id = #{studentId}
+    </update>
+
+    <update id="subViolation">
+        update student
+        set violation_count = greatest(0, violation_count - 1),
+            violation_score = greatest(0, violation_score - #{score}),
+            update_time = now()
+        where id = #{studentId}
+    </update>
+
 </mapper>

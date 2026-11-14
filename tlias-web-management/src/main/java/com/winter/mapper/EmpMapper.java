@@ -54,4 +54,7 @@ public interface EmpMapper {
     @Select("select id,username,password,role from emp " +
             "where username = #{username} and password = #{password}")
     Emp getByUsernameAndPassword(Emp emp);
+
+    @Select("select name from emp where id = #{id}")
+    String getNameById(Integer id);
 }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.winter.mapper.StudentViolationMapper">
+
+    <select id="page" resultType="com.winter.pojo.StudentViolation">
+        select v.id, v.student_id, v.reason, v.score, v.occur_date,
+        v.handler, v.remark, v.create_time,
+        s.name as studentName, s.no as studentNo
+        from student_violation v
+        left join student s on v.student_id = s.id
+        <where>
+            <if test="studentId != null">
+                and v.student_id = #{studentId}
+            </if>
+            <if test="studentName != null and studentName != ''">
+                and s.name like concat('%', #{studentName}, '%')
+            </if>
+        </where>
+        order by v.occur_date desc, v.id desc
+    </select>
+
+    <select id="getById" resultType="com.winter.pojo.StudentViolation">
+        select v.id, v.student_id, v.reason, v.score, v.occur_date,
+               v.handler, v.remark, v.create_time,
+               s.name as studentName, s.no as studentNo
+        from student_violation v
+                 left join student s on v.student_id = s.id
+        where v.id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into student_violation
+            (student_id, reason, score, occur_date, handler, remark, create_time)
+        values
+            (#{studentId}, #{reason}, #{score}, #{occurDate}, #{handler}, #{remark}, #{createTime})
+    </insert>
+
+    <delete id="deleteById">
+        delete from student_violation where id = #{id}
+    </delete>
+
+</mapper>
