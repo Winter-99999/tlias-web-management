@@ -1,6 +1,7 @@
 package com.winter.mapper;
 
 import com.winter.pojo.Emp;
+import com.winter.pojo.EmpExportParam;
 import com.winter.pojo.EmpQueryParam;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -57,4 +58,13 @@ public interface EmpMapper {
 
     @Select("select name from emp where id = #{id}")
     String getNameById(Integer id);
+
+    //导出：不分页，按条件取全部
+    List<Emp> exportList(EmpExportParam param);
+
+    @Select("select count(*) from emp where username = #{username}")
+    int countByUsername(String username);
+
+    @Select("select count(*) from emp where phone = #{phone}")
+    int countByPhone(String phone);
 }

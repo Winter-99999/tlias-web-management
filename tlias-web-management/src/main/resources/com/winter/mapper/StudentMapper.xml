@@ -3,22 +3,25 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.winter.mapper.StudentMapper">
-
+    <!--列表与导出共用的筛选条件-->
+    <sql id="studentCommonWhere">
+        <if test="name != null and name != ''">
+            and s.name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="degree != null">
+            and s.degree = #{degree}
+        </if>
+        <if test="clazzId != null">
+            and s.clazz_id = #{clazzId}
+        </if>
+    </sql>
     <!--条件分页查询-->
     <select id="list" resultType="com.winter.pojo.Student">
         select s.id,s.name,s.no,s.gender,s.phone,s.id_card,s.is_college,s.address,s.degree,s.graduation_date,s.clazz_id,s.violation_count,s.violation_score,s.create_time,s.update_time,
                c.name as clazzName
         from student s left join clazz c on s.clazz_id=c.id
         <where>
-            <if test="name != null and name != ''">
-                and s.name like CONCAT('%',#{name},'%')
-            </if>
-            <if test="degree != null">
-                and s.degree = #{degree}
-            </if>
-            <if test="clazzId != null">
-                and s.clazz_id = #{clazzId}
-            </if>
+            <include refid="studentCommonWhere"/>
         </where>
         order by s.update_time desc
     </select>
@@ -106,5 +109,19 @@
             update_time = now()
         where id = #{studentId}
     </update>
+
+    <!--导出用：不分页，条件与列表一致；masterId 由服务端按角色填充-->
+    <select id="exportList" resultType="com.winter.pojo.Student">
+        select s.id,s.name,s.no,s.gender,s.phone,s.id_card,s.is_college,s.address,s.degree,s.graduation_date,s.clazz_id,s.violation_count,s.violation_score,s.create_time,s.update_time,
+               c.name as clazzName
+        from student s left join clazz c on s.clazz_id = c.id
+        <where>
+            <include refid="studentCommonWhere"/>
+            <if test="masterId != null">
+                and c.master_id = #{masterId}
+            </if>
+        </where>
+        order by s.id
+    </select>
 
 </mapper>

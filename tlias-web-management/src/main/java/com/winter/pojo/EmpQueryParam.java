@@ -11,6 +11,7 @@ public class EmpQueryParam {
     private Integer pageSize = 10; // 每页记录数
     private String name;  // 姓名
     private Integer gender; // 性别
+    private Integer deptId; // 部门
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate begin; // 入职日期
     @DateTimeFormat(pattern = "yyyy-MM-dd")
