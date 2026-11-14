@@ -20,4 +20,6 @@ public interface StudentViolationMapper {
 
     // 撤销：物理删除
     int deleteById(Integer id);
+
+    void deleteByStudentIds(List<Integer> ids);
 }
