@@ -94,4 +94,15 @@
     <select id="countStudentsByClazzId">
         select count(*) from student where clazz_id=#{id}
     </select>
+
+    <!--检测是否为班主任-->
+    <select id="findByMasterIds" resultType="com.winter.pojo.Clazz">
+        select id, name, master_id
+        from clazz
+        where master_id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        order by id
+    </select>
 </mapper>

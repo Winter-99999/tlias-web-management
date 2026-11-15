@@ -23,4 +23,6 @@ public interface ClazzMapper {
     void delete(List<Integer> ids);
 
     Integer countStudentsByClazzId(Integer id);
+
+    List<Clazz> findByMasterIds(List<Integer> ids);
 }

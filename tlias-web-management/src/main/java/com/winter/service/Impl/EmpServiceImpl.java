@@ -2,6 +2,8 @@ package com.winter.service.Impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.winter.exception.BusinessException;
+import com.winter.mapper.ClazzMapper;
 import com.winter.mapper.EmpExprMapper;
 import com.winter.mapper.EmpMapper;
 import com.winter.pojo.*;
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EmpServiceImpl implements EmpService {
@@ -26,6 +29,8 @@ public class EmpServiceImpl implements EmpService {
     private EmpExprMapper empExprMapper;
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
+    private ClazzMapper clazzMapper;
 
     @Override
     public PageResult<Emp> page(EmpQueryParam empQueryParam) {
@@ -46,7 +51,7 @@ public class EmpServiceImpl implements EmpService {
         List<Emp> rows = empMapper.list(empQueryParam);
         //解析查询结构，封装PageResult并返回
         Page<Emp> p = (Page<Emp>) rows;
-        return new PageResult<Emp>(p.getTotal(), p.getResult());
+        return new PageResult<>(p.getTotal(), p.getResult());
 
     }
 
@@ -74,6 +79,14 @@ public class EmpServiceImpl implements EmpService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(List<Integer> ids) {
+        // 仍是班主任的员工不允许删除，否则 clazz.master_id 会悬空
+        List<Clazz> bound = clazzMapper.findByMasterIds(ids);
+        if (!bound.isEmpty()) {
+            String names = bound.stream()
+                    .map(Clazz::getName)
+                    .collect(Collectors.joining("、"));
+            throw new BusinessException("该员工仍是以下班级的班主任，请先更换班主任：" + names);
+        }
         //删除员工基本信息
         empMapper.deleteByIds(ids);
         //删除员工经历
