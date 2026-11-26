@@ -17,6 +17,8 @@ import java.util.List;
 
 @Service
 public class StudentServiceImpl implements StudentService {
+    private static final int MAX_PAGE_SIZE = 100;
+
     @Autowired
     private StudentMapper studentMapper;
     @Autowired
@@ -25,10 +27,13 @@ public class StudentServiceImpl implements StudentService {
     //条件分页查询
     @Override
     public PageResult<Student> page(StudentQueryParam studentQueryParam) {
-        PageHelper.startPage(studentQueryParam.getPage(), studentQueryParam.getPageSize());
+        int page = (studentQueryParam.getPage() == null || studentQueryParam.getPage() < 1) ? 1 : studentQueryParam.getPage();
+        int pageSize = (studentQueryParam.getPageSize() == null || studentQueryParam.getPageSize() < 1)
+                ? 10 : Math.min(studentQueryParam.getPageSize(), MAX_PAGE_SIZE);
+        PageHelper.startPage(page, pageSize);
         List<Student> rows = studentMapper.list(studentQueryParam);
-        Page<Student> page = (Page<Student>) rows;
-        return new PageResult<>(page.getTotal(), page.getResult());
+        Page<Student> pageResult = (Page<Student>) rows;
+        return new PageResult<>(pageResult.getTotal(), pageResult.getResult());
     }
 
     @Override

@@ -18,6 +18,8 @@ import java.util.List;
 
 @Service
 public class ClazzServiceImpl implements ClazzService {
+    private static final int MAX_PAGE_SIZE = 100;
+
     @Autowired
     private ClazzMapper clazzMapper;
     @Autowired   
@@ -26,8 +28,11 @@ public class ClazzServiceImpl implements ClazzService {
     //条件分页查询
     @Override
     public PageResult<Clazz> page(ClazzQueryParam clazzQueryParam) {
+        int page = (clazzQueryParam.getPage() == null || clazzQueryParam.getPage() < 1) ? 1 : clazzQueryParam.getPage();
+        int pageSize = (clazzQueryParam.getPageSize() == null || clazzQueryParam.getPageSize() < 1)
+                ? 10 : Math.min(clazzQueryParam.getPageSize(), MAX_PAGE_SIZE);
         //设置分页参数
-        PageHelper.startPage(clazzQueryParam.getPage(), clazzQueryParam.getPageSize());
+        PageHelper.startPage(page, pageSize);
         //获取当前页数据
         List<Clazz> rows = clazzMapper.list(clazzQueryParam);
         //解析查询结果，封装PageResult并返回

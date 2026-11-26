@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class EmpServiceImpl implements EmpService {
+    private static final int MAX_PAGE_SIZE = 100;
 
     @Autowired
     private EmpMapper empMapper;
@@ -44,9 +45,11 @@ public class EmpServiceImpl implements EmpService {
         //封装PageResult并返回
         return new PageResult<Emp>(total, rows);
         */
-
+        int page = (empQueryParam.getPage() == null || empQueryParam.getPage() < 1) ? 1 : empQueryParam.getPage();
+        int pageSize = (empQueryParam.getPageSize() == null || empQueryParam.getPageSize() < 1)
+                ? 10 : Math.min(empQueryParam.getPageSize(), MAX_PAGE_SIZE);
         //设置分页参数
-        PageHelper.startPage(empQueryParam.getPage(), empQueryParam.getPageSize());
+        PageHelper.startPage(page, pageSize);
         //获取当前页数据
         List<Emp> rows = empMapper.list(empQueryParam);
         //解析查询结构，封装PageResult并返回

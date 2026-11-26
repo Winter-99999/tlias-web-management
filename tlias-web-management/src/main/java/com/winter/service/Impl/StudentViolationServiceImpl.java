@@ -22,6 +22,7 @@ import java.util.List;
 
 @Service
 public class StudentViolationServiceImpl implements StudentViolationService {
+    private static final int MAX_PAGE_SIZE = 100;
 
     @Autowired
     private StudentViolationMapper violationMapper;
@@ -32,7 +33,10 @@ public class StudentViolationServiceImpl implements StudentViolationService {
 
     @Override
     public PageResult<StudentViolation> page(ViolationQueryParam param) {
-        PageHelper.startPage(param.getPage(), param.getPageSize());
+        int page = (param.getPage() == null || param.getPage() < 1) ? 1 : param.getPage();
+        int pageSize = (param.getPageSize() == null || param.getPageSize() < 1)
+                ? 10 : Math.min(param.getPageSize(), MAX_PAGE_SIZE);
+        PageHelper.startPage(page, pageSize);
         List<StudentViolation> rows = violationMapper.page(param);
         Page<StudentViolation> p = (Page<StudentViolation>) rows;
         return new PageResult<>(p.getTotal(), p.getResult());
